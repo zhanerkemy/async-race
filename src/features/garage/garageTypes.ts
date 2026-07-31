@@ -7,5 +7,7 @@ export interface GarageState {
   totalCount: number;
   currentPage: number;
   status: RequestStatus;
+  mutationStatus: RequestStatus;
   error: string | null;
+  mutationError: string | null;
 }

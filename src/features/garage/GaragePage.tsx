@@ -6,10 +6,11 @@ import { GARAGE_PAGE_SIZE } from '../../constants/pagination';
 import { CarList } from './components/CarList';
 import { setGaragePage } from './garageSlice';
 import { fetchCars } from './garageThunks';
+import { CarCreateForm } from './components/CarCreateForm';
 
 export function GaragePage() {
   const dispatch = useAppDispatch();
-  const { cars, totalCount, currentPage, status, error } = useAppSelector(
+  const { cars, totalCount, currentPage, status, error, mutationError } = useAppSelector(
     (state) => state.garage,
   );
 
@@ -26,6 +27,12 @@ export function GaragePage() {
   return (
     <main>
       <h1>Garage ({totalCount})</h1>
+
+      <CarCreateForm />
+
+      {mutationError && (
+        <StatusMessage role="alert">{mutationError}</StatusMessage>
+      )}
 
       {status === 'loading' && <StatusMessage>Loading cars...</StatusMessage>}
 

@@ -1,5 +1,5 @@
 import { API_BASE_URL, API_ENDPOINTS } from '../constants/api';
-import type { CarsResponse } from '../types/car';
+import type { Car, CarData, CarsResponse } from '../types/car';
 import { ApiError } from './apiError';
 
 interface GetCarsParams {
@@ -30,4 +30,20 @@ export async function getCars(params: GetCarsParams): Promise<CarsResponse> {
     cars,
     totalCount,
   };
+}
+
+export async function createCar(carData: CarData): Promise<Car> {
+  const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.garage}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(carData),
+  });
+
+  if (!response.ok) {
+    throw new ApiError('Failed to create car', response.status);
+  }
+
+  return response.json() as Promise<Car>;
 }

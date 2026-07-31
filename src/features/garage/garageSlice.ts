@@ -1,13 +1,15 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { GarageState } from './garageTypes';
-import { fetchCars } from './garageThunks';
+import { addCar, fetchCars } from './garageThunks';
 
 const initialState: GarageState = {
   cars: [],
   totalCount: 0,
   currentPage: 1,
   status: 'idle',
+  mutationStatus: 'idle',
   error: null,
+  mutationError: null,
 };
 
 const garageSlice = createSlice({
@@ -32,6 +34,18 @@ const garageSlice = createSlice({
       .addCase(fetchCars.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message ?? 'Failed to load cars';
+      })
+      .addCase(addCar.pending, (state) => {
+        state.mutationStatus = 'loading';
+        state.mutationError = null;
+      })
+      .addCase(addCar.fulfilled, (state) => {
+        state.mutationStatus = 'succeeded';
+        state.currentPage = 1;
+      })
+      .addCase(addCar.rejected, (state, action) => {
+        state.mutationStatus = 'failed';
+        state.mutationError = action.error.message ?? 'Failed to create car';
       });
   },
 });

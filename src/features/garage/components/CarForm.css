@@ -1,0 +1,53 @@
+.car-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.car-form__field {
+  display: flex;
+  min-width: 220px;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.car-form__color-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.car-form__label {
+  font-size: 14px;
+}
+
+.car-form input[type='text'] {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #777;
+  border-radius: 6px;
+  color: inherit;
+  background: transparent;
+}
+
+.car-form input[type='color'] {
+  width: 50px;
+  height: 40px;
+  padding: 2px;
+  border: 1px solid #777;
+  border-radius: 6px;
+  background: transparent;
+}
+
+.car-form button {
+  min-height: 40px;
+  padding: 8px 16px;
+}
+
+.car-form__error {
+  flex-basis: 100%;
+  margin: 0;
+  color: #ff7b7b;
+}
