@@ -1,0 +1,33 @@
+import { API_BASE_URL, API_ENDPOINTS } from '../constants/api';
+import type { CarsResponse } from '../types/car';
+import { ApiError } from './apiError';
+
+interface GetCarsParams {
+  page: number;
+  limit: number;
+}
+
+function createGarageUrl({ page, limit }: GetCarsParams): string {
+  const searchParams = new URLSearchParams({
+    _page: String(page),
+    _limit: String(limit),
+  });
+
+  return `${API_BASE_URL}${API_ENDPOINTS.garage}?${searchParams.toString()}`;
+}
+
+export async function getCars(params: GetCarsParams): Promise<CarsResponse> {
+  const response = await fetch(createGarageUrl(params));
+
+  if (!response.ok) {
+    throw new ApiError('Failed to load cars', response.status);
+  }
+
+  const cars: CarsResponse['cars'] = await response.json();
+  const totalCount = Number(response.headers.get('X-Total-Count') ?? 0);
+
+  return {
+    cars,
+    totalCount,
+  };
+}

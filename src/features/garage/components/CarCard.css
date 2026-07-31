@@ -1,0 +1,39 @@
+.car-card {
+  padding: 16px 0;
+  border-bottom: 1px dashed #777;
+}
+
+.car-card__controls,
+.car-card__engine-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.car-card__name {
+  margin: 12px 0;
+  font-size: 18px;
+}
+
+.car-card__track {
+  position: relative;
+  display: flex;
+  min-height: 64px;
+  align-items: flex-end;
+  justify-content: space-between;
+  overflow: hidden;
+  border-bottom: 2px solid #777;
+}
+
+.car-card__vehicle {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.car-card__finish {
+  padding-right: 16px;
+  font-size: 36px;
+}
+
+.car-card__engine-controls {
+  margin-top: 12px;
+}

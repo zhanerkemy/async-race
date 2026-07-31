@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { garageReducer } from '../features/garage/garageSlice';
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    garage: garageReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
