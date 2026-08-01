@@ -4,6 +4,10 @@ import type { Car } from '../../../types/car';
 import { setGaragePage, selectCar } from '../garageSlice';
 import { removeCar } from '../garageThunks';
 import './CarCard.css';
+import {
+  startCarEngine,
+  stopCarEngine,
+} from '../../race/raceThunks';
 
 interface CarCardProps {
   car: Car;
@@ -14,7 +18,18 @@ export function CarCard({ car }: CarCardProps) {
   const currentPage = useAppSelector((state) => state.garage.currentPage);
   const carsOnPage = useAppSelector((state) => state.garage.cars.length);
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
+  const engine = useAppSelector((state) => state.race.engines[car.id]);
+
+  const engineStatus = engine?.status ?? 'idle';
+
+  const isStarting = engineStatus === 'starting';
+  const isStarted = engineStatus === 'started';
+  const isStopping = engineStatus === 'stopping';
+
+  const isStartDisabled = isStarting || isStarted || isStopping;
+  const isStopDisabled = engineStatus === 'idle' || isStarting || isStopping;
+
   async function handleRemove(): Promise<void> {
     try {
       setIsDeleting(true);
@@ -28,6 +43,22 @@ export function CarCard({ car }: CarCardProps) {
       }
     } finally {
       setIsDeleting(false);
+    }
+  }
+
+  async function handleStart(): Promise<void> {
+    try {
+      await dispatch(startCarEngine(car.id)).unwrap();
+    } catch {
+      // The race slice stores the failed state.
+    }
+  }
+
+  async function handleStop(): Promise<void> {
+    try {
+      await dispatch(stopCarEngine(car.id)).unwrap();
+    } catch {
+      // The race slice stores the failed state.
     }
   }
   return (
@@ -64,11 +95,27 @@ export function CarCard({ car }: CarCardProps) {
       </div>
 
       <div className="car-card__engine-controls">
-        <button type="button">Start</button>
-        <button disabled type="button">
-          Stop
+        <button
+          disabled={isStartDisabled}
+          onClick={() => void handleStart()}
+          type="button"
+        >
+          {isStarting ? 'Starting...' : 'Start'}
+        </button>
+
+        <button
+          disabled={isStopDisabled}
+          onClick={() => void handleStop()}
+          type="button"
+        >
+          {isStopping ? 'Stopping...' : 'Stop'}
         </button>
       </div>
+      {engineStatus === 'started' && engine && (
+          <p>
+            Velocity: {engine.velocity}, distance: {engine.distance}
+          </p>
+        )}
     </article>
   );
 }
