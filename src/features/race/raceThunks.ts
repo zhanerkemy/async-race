@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { startEngine, stopEngine } from '../../api/engineApi';
+import { driveCar, startEngine, stopEngine } from '../../api/engineApi';
 import type { EngineStartResponse } from '../../types/engine';
 
 export const startCarEngine = createAsyncThunk<
@@ -10,4 +10,11 @@ export const startCarEngine = createAsyncThunk<
 export const stopCarEngine = createAsyncThunk<void, number>(
   'race/stopCarEngine',
   async (carId) => stopEngine(carId),
+);
+
+export const driveCarEngine = createAsyncThunk<void, number>(
+  'race/driveCarEngine',
+  async (carId) => {
+    await driveCar(carId);
+  },
 );

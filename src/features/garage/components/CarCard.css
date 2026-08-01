@@ -25,13 +25,26 @@
 }
 
 .car-card__vehicle {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
   font-size: 48px;
   line-height: 1;
+  transform: translateX(0);
+  will-change: transform;
 }
 
 .car-card__finish {
-  padding-right: 16px;
+  position: absolute;
+  right: 16px;
+  bottom: 0;
   font-size: 36px;
+}
+
+.car-card__status {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #aaa;
 }
 
 .car-card__engine-controls {

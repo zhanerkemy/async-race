@@ -2,8 +2,9 @@ export type CarEngineStatus =
   | 'idle'
   | 'starting'
   | 'started'
-  | 'stopping'
   | 'driving'
+  | 'finished'
+  | 'stopping'
   | 'failed';
 
 export interface CarEngineState {

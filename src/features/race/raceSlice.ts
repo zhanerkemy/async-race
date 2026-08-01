@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RaceState } from './raceTypes';
-import { startCarEngine, stopCarEngine } from './raceThunks';
+import { driveCarEngine, startCarEngine, stopCarEngine } from './raceThunks';
 
 const initialState: RaceState = {
   engines: {},
@@ -67,7 +67,37 @@ const raceSlice = createSlice({
           velocity: currentEngine?.velocity ?? 0,
           distance: currentEngine?.distance ?? 0,
         };
-      });
+      })
+      .addCase(driveCarEngine.pending, (state, action) => {
+        const carId = action.meta.arg;
+        const currentEngine = state.engines[carId];
+
+        state.engines[carId] = {
+            status: 'driving',
+            velocity: currentEngine?.velocity ?? 0,
+            distance: currentEngine?.distance ?? 0,
+        };
+        })
+        .addCase(driveCarEngine.fulfilled, (state, action) => {
+        const carId = action.meta.arg;
+        const currentEngine = state.engines[carId];
+
+        state.engines[carId] = {
+            status: 'finished',
+            velocity: currentEngine?.velocity ?? 0,
+            distance: currentEngine?.distance ?? 0,
+        };
+        })
+        .addCase(driveCarEngine.rejected, (state, action) => {
+        const carId = action.meta.arg;
+        const currentEngine = state.engines[carId];
+
+        state.engines[carId] = {
+            status: 'failed',
+            velocity: currentEngine?.velocity ?? 0,
+            distance: currentEngine?.distance ?? 0,
+        };
+        })
   },
 });
 
