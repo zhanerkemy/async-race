@@ -6,11 +6,11 @@ import { removeCar } from '../garageThunks';
 import './CarCard.css';
 import { useCarAnimation } from '../../race/useCarAnimation';
 import {
+  completeRace,
   driveCarEngine,
   startCarEngine,
   stopCarEngine,
 } from '../../race/raceThunks';
-import { reportRaceWinner } from '../../race/raceSlice';
 
 interface CarCardProps {
   car: Car;
@@ -87,12 +87,12 @@ export function CarCard({ car }: CarCardProps) {
         await dispatch(driveCarEngine(car.id)).unwrap();
 
         if (participatesInRace) {
-          dispatch(
-            reportRaceWinner({
+          await dispatch(
+            completeRace({
               car,
               time: animationDuration / 1000,
             }),
-          );
+          ).unwrap();
         }
       } catch {
         stopAnimation();
