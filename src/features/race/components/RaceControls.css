@@ -1,0 +1,10 @@
+.race-controls {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.race-controls button {
+  min-height: 40px;
+  padding: 8px 18px;
+}

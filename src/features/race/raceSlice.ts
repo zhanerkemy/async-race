@@ -1,15 +1,39 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { RaceState } from './raceTypes';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { RaceState, RaceWinner } from './raceTypes';
 import { driveCarEngine, startCarEngine, stopCarEngine } from './raceThunks';
+
 
 const initialState: RaceState = {
   engines: {},
+  raceRequestId: 0,
+  resetRequestId: 0,
+  isRaceRunning: false,
+  winner: null,
 };
 
 const raceSlice = createSlice({
   name: 'race',
   initialState,
-  reducers: {},
+  reducers: {
+    beginRace(state) {
+        state.raceRequestId += 1;
+        state.isRaceRunning = true;
+        state.winner = null;
+    },
+
+    resetRace(state) {
+        state.resetRequestId += 1;
+        state.isRaceRunning = false;
+        state.winner = null;
+    },
+
+    reportRaceWinner(state, action: PayloadAction<RaceWinner>) {
+        if (state.winner === null) {
+        state.winner = action.payload;
+        state.isRaceRunning = false;
+        }
+    },
+    },
   extraReducers(builder) {
     builder
       .addCase(startCarEngine.pending, (state, action) => {
@@ -101,4 +125,5 @@ const raceSlice = createSlice({
   },
 });
 
+export const { beginRace, resetRace, reportRaceWinner } = raceSlice.actions;
 export const raceReducer = raceSlice.reducer;

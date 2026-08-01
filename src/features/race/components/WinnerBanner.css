@@ -1,0 +1,14 @@
+.winner-banner {
+  position: sticky;
+  z-index: 10;
+  top: 12px;
+  padding: 16px;
+  border: 1px solid #ffd54f;
+  border-radius: 8px;
+  margin: 16px 0;
+  color: #ffd54f;
+  background: #242000;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+}

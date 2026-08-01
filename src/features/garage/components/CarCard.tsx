@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import type { Car } from '../../../types/car';
 import { setGaragePage, selectCar } from '../garageSlice';
@@ -10,6 +10,7 @@ import {
   startCarEngine,
   stopCarEngine,
 } from '../../race/raceThunks';
+import { reportRaceWinner } from '../../race/raceSlice';
 
 interface CarCardProps {
   car: Car;
@@ -44,6 +45,17 @@ export function CarCard({ car }: CarCardProps) {
     resetAnimation,
   } = useCarAnimation();
 
+  const raceRequestId = useAppSelector(
+    (state) => state.race.raceRequestId,
+  );
+
+  const resetRequestId = useAppSelector(
+    (state) => state.race.resetRequestId,
+  );
+
+  const handledRaceRequestRef = useRef(0);
+  const handledResetRequestRef = useRef(0);
+
   async function handleRemove(): Promise<void> {
     try {
       setIsDeleting(true);
@@ -60,21 +72,36 @@ export function CarCard({ car }: CarCardProps) {
     }
   }
 
-  async function handleStart(): Promise<void> {
-    try {
-      const engineData = await dispatch(startCarEngine(car.id)).unwrap();
+  const handleStart = useCallback(
+    async (participatesInRace = false): Promise<void> => {
+      try {
+        const engineData = await dispatch(
+          startCarEngine(car.id),
+        ).unwrap();
 
-      const animationDuration = engineData.distance / engineData.velocity;
+        const animationDuration =
+          engineData.distance / engineData.velocity;
 
-      startAnimation(animationDuration);
+        startAnimation(animationDuration);
 
-      await dispatch(driveCarEngine(car.id)).unwrap();
-    } catch {
-      stopAnimation();
-    }
-  }
+        await dispatch(driveCarEngine(car.id)).unwrap();
 
-  async function handleStop(): Promise<void> {
+        if (participatesInRace) {
+          dispatch(
+            reportRaceWinner({
+              car,
+              time: animationDuration / 1000,
+            }),
+          );
+        }
+      } catch {
+        stopAnimation();
+      }
+    },
+    [car, dispatch, startAnimation, stopAnimation],
+  );
+
+  const handleStop = useCallback(async (): Promise<void> => {
     try {
       stopAnimation();
       await dispatch(stopCarEngine(car.id)).unwrap();
@@ -82,7 +109,36 @@ export function CarCard({ car }: CarCardProps) {
     } catch {
       // The race slice stores the failed state.
     }
-  }
+  }, [
+    car.id,
+    dispatch,
+    resetAnimation,
+    stopAnimation,
+  ]);
+
+  useEffect(() => {
+    if (
+      raceRequestId === 0 ||
+      handledRaceRequestRef.current === raceRequestId
+    ) {
+      return;
+    }
+
+    handledRaceRequestRef.current = raceRequestId;
+    void handleStart(true);
+  }, [handleStart, raceRequestId]);
+
+  useEffect(() => {
+    if (
+      resetRequestId === 0 ||
+      handledResetRequestRef.current === resetRequestId
+    ) {
+      return;
+    }
+
+    handledResetRequestRef.current = resetRequestId;
+    void handleStop();
+  }, [handleStop, resetRequestId]);
 
   return (
     <article className="car-card">
@@ -121,7 +177,7 @@ export function CarCard({ car }: CarCardProps) {
       <div className="car-card__engine-controls">
         <button
           disabled={isStartDisabled}
-          onClick={() => void handleStart()}
+          onClick={() => void handleStart(false)}
           type="button"
         >
           {isStarting ? 'Starting...' : 'Start'}

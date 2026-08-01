@@ -9,6 +9,8 @@ import { fetchCars } from './garageThunks';
 import { CarCreateForm } from './components/CarCreateForm';
 import { CarEditForm } from './components/CarEditForm';
 import { RandomCarsButton } from './components/RandomCarsButton';
+import { RaceControls } from '../race/components/RaceControls';
+import { WinnerBanner } from '../race/components/WinnerBanner';
 
 export function GaragePage() {
   const dispatch = useAppDispatch();
@@ -33,6 +35,9 @@ export function GaragePage() {
       <CarCreateForm />
       <CarEditForm />
       <RandomCarsButton />
+
+      <RaceControls />
+      <WinnerBanner />
 
       {mutationError && (
         <StatusMessage role="alert">{mutationError}</StatusMessage>

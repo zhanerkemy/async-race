@@ -30,24 +30,27 @@ export function useCarAnimation(): CarAnimation {
 
   const startAnimation = useCallback(
     (duration: number): void => {
-      const carElement = carRef.current;
-      const trackElement = trackRef.current;
+        const currentCarElement = carRef.current;
+        const currentTrackElement = trackRef.current;
 
-      if (!carElement || !trackElement) {
+        if (!currentCarElement || !currentTrackElement) {
         return;
-      }
+        }
 
-      stopAnimation();
+        const carElement = currentCarElement;
+        const trackElement = currentTrackElement;
 
-      const finishOffset = 60;
-      const travelDistance = Math.max(
+        stopAnimation();
+
+        const finishOffset = 60;
+        const travelDistance = Math.max(
         trackElement.clientWidth - carElement.clientWidth - finishOffset,
         0,
-      );
+        );
 
-      const startedAt = performance.now();
+        const startedAt = performance.now();
 
-      function animate(currentTime: number): void {
+        function animate(currentTime: number): void {
         const elapsedTime = currentTime - startedAt;
         const progress = Math.min(elapsedTime / duration, 1);
         const position = travelDistance * progress;
@@ -55,16 +58,16 @@ export function useCarAnimation(): CarAnimation {
         carElement.style.transform = `translateX(${position}px)`;
 
         if (progress < 1) {
-          animationFrameRef.current = requestAnimationFrame(animate);
+            animationFrameRef.current = requestAnimationFrame(animate);
         } else {
-          animationFrameRef.current = null;
+            animationFrameRef.current = null;
         }
-      }
+        }
 
-      animationFrameRef.current = requestAnimationFrame(animate);
+        animationFrameRef.current = requestAnimationFrame(animate);
     },
     [stopAnimation],
-  );
+    );
 
   useEffect(
     () => () => {
