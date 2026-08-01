@@ -8,6 +8,7 @@ import { setGaragePage } from './garageSlice';
 import { fetchCars } from './garageThunks';
 import { CarCreateForm } from './components/CarCreateForm';
 import { CarEditForm } from './components/CarEditForm';
+import { RandomCarsButton } from './components/RandomCarsButton';
 
 export function GaragePage() {
   const dispatch = useAppDispatch();
@@ -31,6 +32,7 @@ export function GaragePage() {
 
       <CarCreateForm />
       <CarEditForm />
+      <RandomCarsButton />
 
       {mutationError && (
         <StatusMessage role="alert">{mutationError}</StatusMessage>

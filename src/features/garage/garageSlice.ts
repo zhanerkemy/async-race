@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { GarageState } from './garageTypes';
-import { addCar, fetchCars, removeCar } from './garageThunks';
+import { addCar, fetchCars, removeCar, createRandomCars } from './garageThunks';
 import type { Car } from '../../types/car';
 
 const initialState: GarageState = {
@@ -69,6 +69,18 @@ const garageSlice = createSlice({
       .addCase(removeCar.rejected, (state, action) => {
         state.mutationStatus = 'failed';
         state.mutationError = action.error.message ?? 'Failed to delete car';
+      })
+      .addCase(createRandomCars.pending, (state) => {
+        state.mutationStatus = 'loading';
+        state.mutationError = null;
+      })
+      .addCase(createRandomCars.fulfilled, (state) => {
+        state.mutationStatus = 'succeeded';
+      })
+      .addCase(createRandomCars.rejected, (state, action) => {
+        state.mutationStatus = 'failed';
+        state.mutationError =
+          action.error.message ?? 'Failed to create random cars';
       });
   },
 });
