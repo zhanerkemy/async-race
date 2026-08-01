@@ -51,3 +51,18 @@
   margin: 0;
   color: #ff7b7b;
 }
+
+@media (max-width: 500px) {
+  .car-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .car-form__field {
+    min-width: 0;
+  }
+
+  .car-form button {
+    width: 100%;
+  }
+}

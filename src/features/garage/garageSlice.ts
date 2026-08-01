@@ -1,11 +1,13 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { GarageState } from './garageTypes';
 import { addCar, fetchCars } from './garageThunks';
+import type { Car } from '../../types/car';
 
 const initialState: GarageState = {
   cars: [],
   totalCount: 0,
   currentPage: 1,
+  selectedCar: null,
   status: 'idle',
   mutationStatus: 'idle',
   error: null,
@@ -18,6 +20,12 @@ const garageSlice = createSlice({
   reducers: {
     setGaragePage(state, action: PayloadAction<number>) {
       state.currentPage = action.payload;
+    },
+    selectCar(state, action: PayloadAction<Car>) {
+      state.selectedCar = action.payload;
+    },
+    clearSelectedCar(state) {
+      state.selectedCar = null;
     },
   },
   extraReducers(builder) {
@@ -50,6 +58,6 @@ const garageSlice = createSlice({
   },
 });
 
-export const { setGaragePage } = garageSlice.actions;
+export const { setGaragePage, selectCar, clearSelectedCar } = garageSlice.actions;
 
 export const garageReducer = garageSlice.reducer;

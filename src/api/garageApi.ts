@@ -47,3 +47,19 @@ export async function createCar(carData: CarData): Promise<Car> {
 
   return response.json() as Promise<Car>;
 }
+
+export async function updateCar(id: number, carData: CarData): Promise<Car> {
+  const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.garage}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(carData),
+  });
+
+  if (!response.ok) {
+    throw new ApiError('Failed to update car', response.status);
+  }
+
+  return response.json() as Promise<Car>;
+}

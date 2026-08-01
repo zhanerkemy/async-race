@@ -7,6 +7,7 @@ import { CarList } from './components/CarList';
 import { setGaragePage } from './garageSlice';
 import { fetchCars } from './garageThunks';
 import { CarCreateForm } from './components/CarCreateForm';
+import { CarEditForm } from './components/CarEditForm';
 
 export function GaragePage() {
   const dispatch = useAppDispatch();
@@ -29,6 +30,7 @@ export function GaragePage() {
       <h1>Garage ({totalCount})</h1>
 
       <CarCreateForm />
+      <CarEditForm />
 
       {mutationError && (
         <StatusMessage role="alert">{mutationError}</StatusMessage>

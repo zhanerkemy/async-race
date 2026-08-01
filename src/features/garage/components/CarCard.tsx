@@ -1,15 +1,22 @@
 import type { Car } from '../../../types/car';
 import './CarCard.css';
+import { useAppDispatch } from '../../../app/hooks';
+import { selectCar } from '../garageSlice';
 
 interface CarCardProps {
   car: Car;
 }
 
 export function CarCard({ car }: CarCardProps) {
+  const dispatch = useAppDispatch();
   return (
     <article className="car-card">
       <div className="car-card__controls">
-        <button type="button">Select</button>
+        <button 
+          type="button" 
+          onClick={() => dispatch(selectCar(car))}>
+            Select
+        </button>
         <button type="button">Remove</button>
       </div>
 

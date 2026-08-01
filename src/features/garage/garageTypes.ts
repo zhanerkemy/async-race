@@ -6,6 +6,7 @@ export interface GarageState {
   cars: Car[];
   totalCount: number;
   currentPage: number;
+  selectedCar: Car | null;
   status: RequestStatus;
   mutationStatus: RequestStatus;
   error: string | null;
