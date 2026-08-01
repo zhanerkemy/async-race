@@ -1,7 +1,9 @@
+import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import type { Car } from '../../../types/car';
+import { setGaragePage, selectCar } from '../garageSlice';
+import { removeCar } from '../garageThunks';
 import './CarCard.css';
-import { useAppDispatch } from '../../../app/hooks';
-import { selectCar } from '../garageSlice';
 
 interface CarCardProps {
   car: Car;
@@ -9,6 +11,25 @@ interface CarCardProps {
 
 export function CarCard({ car }: CarCardProps) {
   const dispatch = useAppDispatch();
+  const currentPage = useAppSelector((state) => state.garage.currentPage);
+  const carsOnPage = useAppSelector((state) => state.garage.cars.length);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+  async function handleRemove(): Promise<void> {
+    try {
+      setIsDeleting(true);
+
+      const shouldMoveBack = carsOnPage === 1 && currentPage > 1;
+
+      await dispatch(removeCar(car.id)).unwrap();
+
+      if (shouldMoveBack) {
+        dispatch(setGaragePage(currentPage - 1));
+      }
+    } finally {
+      setIsDeleting(false);
+    }
+  }
   return (
     <article className="car-card">
       <div className="car-card__controls">
@@ -17,7 +38,13 @@ export function CarCard({ car }: CarCardProps) {
           onClick={() => dispatch(selectCar(car))}>
             Select
         </button>
-        <button type="button">Remove</button>
+        <button
+          disabled={isDeleting}
+          onClick={() => void handleRemove()}
+          type="button"
+        >
+          {isDeleting ? 'Removing...' : 'Remove'}
+        </button>
       </div>
 
       <h2 className="car-card__name">{car.name}</h2>

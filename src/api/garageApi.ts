@@ -63,3 +63,13 @@ export async function updateCar(id: number, carData: CarData): Promise<Car> {
 
   return response.json() as Promise<Car>;
 }
+
+export async function deleteCar(id: number): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.garage}/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new ApiError('Failed to delete car', response.status);
+  }
+}

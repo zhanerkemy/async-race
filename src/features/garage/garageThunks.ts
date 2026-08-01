@@ -1,7 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { createCar, getCars } from '../../api/garageApi';
+import { createCar, deleteCar, getCars } from '../../api/garageApi';
+import { deleteWinner } from '../../api/winnersApi';
 import { GARAGE_PAGE_SIZE } from '../../constants/pagination';
 import type { CarData } from '../../types/car';
+import type { RootState } from '../../app/store';
 
 export const fetchCars = createAsyncThunk(
   'garage/fetchCars',
@@ -22,3 +24,20 @@ export const addCar = createAsyncThunk(
     return createdCar;
   },
 );
+
+export const removeCar = createAsyncThunk<
+  number,
+  number,
+  { state: RootState }
+>('garage/removeCar', async (carId, { dispatch, getState }) => {
+  await deleteCar(carId);
+  await deleteWinner(carId);
+
+  const { currentPage, cars } = getState().garage;
+  const shouldMoveBack = cars.length === 1 && currentPage > 1;
+  const nextPage = shouldMoveBack ? currentPage - 1 : currentPage;
+
+  await dispatch(fetchCars(nextPage)).unwrap();
+
+  return carId;
+});
