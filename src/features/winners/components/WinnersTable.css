@@ -1,0 +1,41 @@
+.winners-table-wrapper {
+  overflow-x: auto;
+}
+
+.winners-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.winners-table th,
+.winners-table td {
+  padding: 12px;
+  border-bottom: 1px solid #444;
+  text-align: left;
+}
+
+.winners-table th {
+  color: #aaa;
+}
+
+.winners-table__sort {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.winners-table__sort:hover {
+  color: #646cff;
+}
+
+@media (max-width: 500px) {
+  .winners-table th,
+  .winners-table td {
+    padding: 8px;
+    font-size: 13px;
+  }
+}

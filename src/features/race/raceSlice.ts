@@ -31,7 +31,6 @@ const raceSlice = createSlice({
     builder.addCase(reportRaceWinner, (state, action) => {
         if (state.winner === null) {
             state.winner = action.payload;
-            state.isRaceRunning = false;
         }
         })
       .addCase(startCarEngine.pending, (state, action) => {

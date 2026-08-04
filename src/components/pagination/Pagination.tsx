@@ -4,12 +4,14 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  disabled?: boolean;
 }
 
 export function Pagination({
   currentPage,
   totalPages,
   onPageChange,
+  disabled = false,
 }: PaginationProps) {
   const hasPreviousPage = currentPage > 1;
   const hasNextPage = currentPage < totalPages;
@@ -17,7 +19,7 @@ export function Pagination({
   return (
     <nav aria-label="Pagination" className="pagination">
       <button
-        disabled={!hasPreviousPage}
+        disabled={disabled || !hasPreviousPage}
         onClick={() => onPageChange(currentPage - 1)}
         type="button"
       >
@@ -29,7 +31,7 @@ export function Pagination({
       </span>
 
       <button
-        disabled={!hasNextPage}
+        disabled={disabled || !hasNextPage}
         onClick={() => onPageChange(currentPage + 1)}
         type="button"
       >

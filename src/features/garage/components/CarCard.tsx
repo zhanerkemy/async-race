@@ -11,6 +11,7 @@ import {
   startCarEngine,
   stopCarEngine,
 } from '../../race/raceThunks';
+import { selectIsRaceActive } from '../../race/raceSelectors';
 
 interface CarCardProps {
   car: Car;
@@ -37,6 +38,8 @@ export function CarCard({ car }: CarCardProps) {
   const isStartDisabled = isStarting || isDriving || isStopping || isActive;
   const isStopDisabled = engineStatus === 'idle' || isStarting || isStopping;
 
+  const isRaceActive = useAppSelector(selectIsRaceActive);
+
   const {
     carRef,
     trackRef,
@@ -57,6 +60,10 @@ export function CarCard({ car }: CarCardProps) {
   const handledResetRequestRef = useRef(0);
 
   async function handleRemove(): Promise<void> {
+    if (isRaceActive) {
+      return;
+    }
+
     try {
       setIsDeleting(true);
 
@@ -143,13 +150,15 @@ export function CarCard({ car }: CarCardProps) {
   return (
     <article className="car-card">
       <div className="car-card__controls">
-        <button 
-          type="button" 
-          onClick={() => dispatch(selectCar(car))}>
-            Select
+        <button
+          disabled={isRaceActive}
+          onClick={() => dispatch(selectCar(car))}
+          type="button"
+        >
+          Select
         </button>
         <button
-          disabled={isDeleting}
+          disabled={isDeleting || isRaceActive}
           onClick={() => void handleRemove()}
           type="button"
         >

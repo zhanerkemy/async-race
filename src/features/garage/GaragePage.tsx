@@ -11,9 +11,11 @@ import { CarEditForm } from './components/CarEditForm';
 import { RandomCarsButton } from './components/RandomCarsButton';
 import { RaceControls } from '../race/components/RaceControls';
 import { WinnerBanner } from '../race/components/WinnerBanner';
+import { selectIsRaceActive } from '../race/raceSelectors';
 
 export function GaragePage() {
   const dispatch = useAppDispatch();
+  const isRaceActive = useAppSelector(selectIsRaceActive);
   const { cars, totalCount, currentPage, status, error, mutationError } = useAppSelector(
     (state) => state.garage,
   );
@@ -25,6 +27,10 @@ export function GaragePage() {
   }, [currentPage, dispatch]);
 
   function handlePageChange(page: number): void {
+    if (isRaceActive) {
+      return;
+    }
+
     dispatch(setGaragePage(page));
   }
 
@@ -58,6 +64,7 @@ export function GaragePage() {
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
+          disabled={isRaceActive}
           onPageChange={handlePageChange}
           totalPages={totalPages}
         />

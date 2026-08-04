@@ -73,3 +73,13 @@ export async function deleteCar(id: number): Promise<void> {
     throw new ApiError('Failed to delete car', response.status);
   }
 }
+
+export async function getCar(id: number): Promise<Car> {
+  const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.garage}/${id}`);
+
+  if (!response.ok) {
+    throw new ApiError('Failed to load car', response.status);
+  }
+
+  return response.json() as Promise<Car>;
+}
