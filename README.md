@@ -187,7 +187,8 @@ http://localhost:3000
 
 ## Winners
 
-> <img width="1286" height="442" alt="image" src="https://github.com/user-attachments/assets/f9e663ff-0489-4ca3-9eba-1b27fbbe1d5d" />
+> <img width="1571" height="537" alt="Снимок экрана 2026-08-05 204206" src="https://github.com/user-attachments/assets/972fe3d8-da60-4033-a1ae-63e02a9bdbd8" />
+
 
 
 ---
