@@ -1,6 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Car } from '../../types/car';
-import type { CarFormDraft, GarageState } from './garageTypes';
+import type {
+  CarFormDraft,
+  EditFormDraft,
+  GarageState,
+} from './garageTypes';
 import {
   createRandomCars,
   fetchCars,
@@ -25,6 +29,12 @@ const initialState: GarageState = {
 
   error: null,
   mutationError: null,
+
+  editDraft: {
+    carId: null,
+    name: '',
+    color: '#000000',
+  },
 };
 
 const garageSlice = createSlice({
@@ -38,14 +48,28 @@ const garageSlice = createSlice({
 
     selectCar(state, action: PayloadAction<Car>) {
       state.selectedCar = action.payload;
+      state.editDraft = {
+        carId: action.payload.id,
+        name: action.payload.name,
+        color: action.payload.color,
+      };
     },
 
     clearSelectedCar(state) {
       state.selectedCar = null;
+      state.editDraft = {
+        carId: null,
+        name: '',
+        color: '#000000',
+      };
     },
 
     setCreateDraft(state, action: PayloadAction<CarFormDraft>) {
       state.createDraft = action.payload;
+    },
+
+    setEditDraft(state, action: PayloadAction<EditFormDraft>) {
+      state.editDraft = action.payload;
     },
 
     resetCreateDraft(state) {
@@ -119,6 +143,7 @@ export const {
   clearSelectedCar,
   setCreateDraft,
   resetCreateDraft,
+  setEditDraft,
   clearGarageMutationError,
 } = garageSlice.actions;
 

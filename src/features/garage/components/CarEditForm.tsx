@@ -1,31 +1,69 @@
 import { useState, type FormEvent } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { updateCar } from '../../../api/garageApi';
-import type { Car } from '../../../types/car';
-import { clearSelectedCar } from '../garageSlice';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { selectIsRaceActive } from '../../race/raceSelectors';
+import {
+  clearSelectedCar,
+  setEditDraft,
+} from '../garageSlice';
 import { fetchCars } from '../garageThunks';
 import './CarForm.css';
 
-const DEFAULT_CAR_COLOR = '#000000';
 const MAX_CAR_NAME_LENGTH = 30;
 
-interface EditableCarFormProps {
-  car: Car;
-  currentPage: number;
-}
-
-function EditableCarForm({ car, currentPage }: EditableCarFormProps) {
+export function CarEditForm() {
   const dispatch = useAppDispatch();
 
-  const [name, setName] = useState(car.name);
-  const [color, setColor] = useState(car.color);
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const selectedCar = useAppSelector(
+    (state) => state.garage.selectedCar,
+  );
+
+  const currentPage = useAppSelector(
+    (state) => state.garage.currentPage,
+  );
+
+  const editDraft = useAppSelector(
+    (state) => state.garage.editDraft,
+  );
+
+  const isRaceActive = useAppSelector(selectIsRaceActive);
+
+  const [validationError, setValidationError] =
+    useState<string | null>(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
+  const isFormDisabled =
+    !selectedCar || isSubmitting || isRaceActive;
+
+  function updateName(name: string): void {
+    dispatch(
+      setEditDraft({
+        ...editDraft,
+        name,
+      }),
+    );
+  }
+
+  function updateColor(color: string): void {
+    dispatch(
+      setEditDraft({
+        ...editDraft,
+        color,
+      }),
+    );
+  }
+
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> {
     event.preventDefault();
 
-    const trimmedName = name.trim();
+    if (!selectedCar || isRaceActive) {
+      return;
+    }
+
+    const trimmedName = editDraft.name.trim();
 
     if (!trimmedName) {
       setValidationError('Enter a car name.');
@@ -33,7 +71,9 @@ function EditableCarForm({ car, currentPage }: EditableCarFormProps) {
     }
 
     if (trimmedName.length > MAX_CAR_NAME_LENGTH) {
-      setValidationError(`Car name must not exceed ${MAX_CAR_NAME_LENGTH} characters.`);
+      setValidationError(
+        `Car name must not exceed ${MAX_CAR_NAME_LENGTH} characters.`,
+      );
       return;
     }
 
@@ -41,9 +81,9 @@ function EditableCarForm({ car, currentPage }: EditableCarFormProps) {
       setIsSubmitting(true);
       setValidationError(null);
 
-      await updateCar(car.id, {
+      await updateCar(selectedCar.id, {
         name: trimmedName,
-        color,
+        color: editDraft.color,
       });
 
       dispatch(clearSelectedCar());
@@ -56,16 +96,20 @@ function EditableCarForm({ car, currentPage }: EditableCarFormProps) {
   }
 
   return (
-    <form className="car-form" onSubmit={(event) => void handleSubmit(event)}>
+    <form
+      className="car-form"
+      onSubmit={(event) => void handleSubmit(event)}
+    >
       <label className="car-form__field">
         <span className="car-form__label">Edit car name</span>
 
         <input
-          disabled={isSubmitting}
+          disabled={isFormDisabled}
           maxLength={MAX_CAR_NAME_LENGTH}
-          onChange={(event) => setName(event.target.value)}
+          onChange={(event) => updateName(event.target.value)}
+          placeholder="Select a car first"
           type="text"
-          value={name}
+          value={editDraft.name}
         />
       </label>
 
@@ -73,57 +117,24 @@ function EditableCarForm({ car, currentPage }: EditableCarFormProps) {
         <span className="car-form__label">Color</span>
 
         <input
-          disabled={isSubmitting}
-          onChange={(event) => setColor(event.target.value)}
+          disabled={isFormDisabled}
+          onChange={(event) => updateColor(event.target.value)}
           type="color"
-          value={color}
+          value={editDraft.color}
         />
       </label>
 
-      <button disabled={isSubmitting} type="submit">
-        {isSubmitting ? 'Updating...' : 'Update'}
+      <button disabled={isFormDisabled} type="submit">
+        {isRaceActive
+          ? 'Race in progress'
+          : isSubmitting
+            ? 'Updating...'
+            : 'Update'}
       </button>
 
-      {validationError && <p className="car-form__error">{validationError}</p>}
+      {validationError && (
+        <p className="car-form__error">{validationError}</p>
+      )}
     </form>
-  );
-}
-
-function DisabledCarEditForm() {
-  return (
-    <form className="car-form">
-      <label className="car-form__field">
-        <span className="car-form__label">Edit car name</span>
-
-        <input disabled placeholder="Select a car first" type="text" />
-      </label>
-
-      <label className="car-form__color-field">
-        <span className="car-form__label">Color</span>
-
-        <input disabled type="color" value={DEFAULT_CAR_COLOR} readOnly />
-      </label>
-
-      <button disabled type="button">
-        Update
-      </button>
-    </form>
-  );
-}
-
-export function CarEditForm() {
-  const selectedCar = useAppSelector((state) => state.garage.selectedCar);
-  const currentPage = useAppSelector((state) => state.garage.currentPage);
-
-  if (!selectedCar) {
-    return <DisabledCarEditForm />;
-  }
-
-  return (
-    <EditableCarForm
-      car={selectedCar}
-      currentPage={currentPage}
-      key={selectedCar.id}
-    />
   );
 }
