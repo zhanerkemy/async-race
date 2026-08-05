@@ -27,11 +27,17 @@
 .car-card__vehicle {
   position: relative;
   z-index: 1;
+  width: 96px;
   flex-shrink: 0;
-  font-size: 48px;
-  line-height: 1;
+  line-height: 0;
   transform: translateX(0);
   will-change: transform;
+}
+
+.car-card__vehicle-icon {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .car-card__finish {

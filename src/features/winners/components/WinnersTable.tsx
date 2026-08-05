@@ -75,6 +75,7 @@ export function WinnersTable({
 
               <td>
                 <CarIcon
+                  className="winners-table__car-icon"
                   color={winner.car.color}
                   title={winner.car.name}
                 />

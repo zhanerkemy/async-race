@@ -12,6 +12,7 @@ import {
   stopCarEngine,
 } from '../../race/raceThunks';
 import { selectIsRaceActive } from '../../race/raceSelectors';
+import { CarIcon } from '../../../components/car/CarIcon';
 
 interface CarCardProps {
   car: Car;
@@ -169,13 +170,12 @@ export function CarCard({ car }: CarCardProps) {
       <h2 className="car-card__name">{car.name}</h2>
 
       <div className="car-card__track" ref={trackRef}>
-        <div
-          aria-label={`${car.name} car`}
-          className="car-card__vehicle"
-          ref={carRef}
-          style={{ color: car.color }}
-        >
-          🚗
+        <div className="car-card__vehicle" ref={carRef}>
+          <CarIcon
+            className="car-card__vehicle-icon"
+            color={car.color}
+            title={car.name}
+          />
         </div>
 
         <span aria-hidden="true" className="car-card__finish">

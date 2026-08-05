@@ -32,6 +32,12 @@
   color: #646cff;
 }
 
+.winners-table__car-icon {
+  display: block;
+  width: 72px;
+  height: auto;
+}
+
 @media (max-width: 500px) {
   .winners-table th,
   .winners-table td {
