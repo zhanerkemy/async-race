@@ -22,15 +22,27 @@
 }
 
 .navigation-link {
-  padding: 10px 16px;
-  border: 1px solid currentcolor;
-  border-radius: 6px;
-  color: inherit;
+  padding: 10px 18px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 14px;
+  color: #e5e7eb;
+  background: rgb(255 255 255 / 4%);
   text-decoration: none;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.navigation-link:hover {
+  color: #ffffff;
+  background: rgb(99 102 241 / 18%);
+  transform: translateY(-1px);
 }
 
 .navigation-link-active {
-  color: #646cff;
+  color: #ffffff;
+  background: linear-gradient(135deg, #6c63ff, #4f46e5);
 }
 
 .navigation-link-disabled {
