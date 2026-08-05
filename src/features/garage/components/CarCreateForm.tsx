@@ -2,26 +2,56 @@ import { useState, type FormEvent } from 'react';
 import { createCar } from '../../../api/garageApi';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectIsRaceActive } from '../../race/raceSelectors';
+import {
+  resetCreateDraft,
+  setCreateDraft,
+} from '../garageSlice';
 import { fetchCars } from '../garageThunks';
 import './CarForm.css';
 
-const DEFAULT_CAR_COLOR = '#ff0000';
 const MAX_CAR_NAME_LENGTH = 30;
 
 export function CarCreateForm() {
   const dispatch = useAppDispatch();
 
-  const currentPage = useAppSelector((state) => state.garage.currentPage);
+  const currentPage = useAppSelector(
+    (state) => state.garage.currentPage,
+  );
+
+  const { name, color } = useAppSelector(
+    (state) => state.garage.createDraft,
+  );
+
   const isRaceActive = useAppSelector(selectIsRaceActive);
 
-  const [name, setName] = useState('');
-  const [color, setColor] = useState(DEFAULT_CAR_COLOR);
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const [validationError, setValidationError] =
+    useState<string | null>(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isFormDisabled = isSubmitting || isRaceActive;
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
+  function updateName(nextName: string): void {
+    dispatch(
+      setCreateDraft({
+        name: nextName,
+        color,
+      }),
+    );
+  }
+
+  function updateColor(nextColor: string): void {
+    dispatch(
+      setCreateDraft({
+        name,
+        color: nextColor,
+      }),
+    );
+  }
+
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> {
     event.preventDefault();
 
     if (isRaceActive) {
@@ -51,9 +81,7 @@ export function CarCreateForm() {
         color,
       });
 
-      setName('');
-      setColor(DEFAULT_CAR_COLOR);
-
+      dispatch(resetCreateDraft());
       await dispatch(fetchCars(currentPage)).unwrap();
     } catch {
       setValidationError('Failed to create car.');
@@ -73,7 +101,7 @@ export function CarCreateForm() {
         <input
           disabled={isFormDisabled}
           maxLength={MAX_CAR_NAME_LENGTH}
-          onChange={(event) => setName(event.target.value)}
+          onChange={(event) => updateName(event.target.value)}
           placeholder="Enter car name"
           type="text"
           value={name}
@@ -85,7 +113,7 @@ export function CarCreateForm() {
 
         <input
           disabled={isFormDisabled}
-          onChange={(event) => setColor(event.target.value)}
+          onChange={(event) => updateColor(event.target.value)}
           type="color"
           value={color}
         />

@@ -7,8 +7,16 @@ export interface GarageState {
   totalCount: number;
   currentPage: number;
   selectedCar: Car | null;
+
+  createDraft: CarFormDraft;
+
   status: RequestStatus;
   mutationStatus: RequestStatus;
   error: string | null;
   mutationError: string | null;
+}
+
+export interface CarFormDraft {
+  name: string;
+  color: string;
 }
