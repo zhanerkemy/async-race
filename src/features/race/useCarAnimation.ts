@@ -42,11 +42,13 @@ export function useCarAnimation(): CarAnimation {
 
         stopAnimation();
 
-        const finishOffset = 60;
+        const FINISH_AREA_WIDTH = 64;
         const travelDistance = Math.max(
-        trackElement.clientWidth - carElement.clientWidth - finishOffset,
-        0,
-        );
+          trackElement.clientWidth - 
+            carElement.clientWidth - 
+            FINISH_AREA_WIDTH,
+          0,
+          );
 
         const startedAt = performance.now();
 

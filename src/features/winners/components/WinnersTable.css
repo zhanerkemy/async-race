@@ -1,9 +1,11 @@
 .winners-table-wrapper {
+  width: 100%;
   overflow-x: auto;
 }
 
 .winners-table {
   width: 100%;
+  min-width: 620px;
   border-collapse: collapse;
   margin: 20px 0;
 }
@@ -43,5 +45,9 @@
   .winners-table td {
     padding: 8px;
     font-size: 13px;
+  }
+
+  .winners-table__car-icon {
+    width: 58px;
   }
 }

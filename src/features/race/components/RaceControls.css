@@ -1,5 +1,6 @@
 .race-controls {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin: 20px 0;
 }
@@ -7,4 +8,10 @@
 .race-controls button {
   min-height: 40px;
   padding: 8px 18px;
+}
+
+@media (max-width: 500px) {
+  .race-controls button {
+    flex: 1;
+  }
 }
