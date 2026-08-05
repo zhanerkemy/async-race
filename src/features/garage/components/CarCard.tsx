@@ -13,6 +13,8 @@ import {
 } from '../../race/raceThunks';
 import { selectIsRaceActive } from '../../race/raceSelectors';
 import { CarIcon } from '../../../components/car/CarIcon';
+import { CarManagementControls } from './CarManagementControls';
+import { EngineControls } from './EngineControls';
 
 interface CarCardProps {
   car: Car;
@@ -150,22 +152,12 @@ export function CarCard({ car }: CarCardProps) {
 
   return (
     <article className="car-card">
-      <div className="car-card__controls">
-        <button
-          disabled={isRaceActive}
-          onClick={() => dispatch(selectCar(car))}
-          type="button"
-        >
-          Select
-        </button>
-        <button
-          disabled={isDeleting || isRaceActive}
-          onClick={() => void handleRemove()}
-          type="button"
-        >
-          {isDeleting ? 'Removing...' : 'Remove'}
-        </button>
-      </div>
+      <CarManagementControls
+        isDeleting={isDeleting}
+        isRaceActive={isRaceActive}
+        onRemove={() => void handleRemove()}
+        onSelect={() => dispatch(selectCar(car))}
+      />
 
       <h2 className="car-card__name">{car.name}</h2>
 
@@ -183,23 +175,14 @@ export function CarCard({ car }: CarCardProps) {
         </span>
       </div>
 
-      <div className="car-card__engine-controls">
-        <button
-          disabled={isStartDisabled}
-          onClick={() => void handleStart(false)}
-          type="button"
-        >
-          {isStarting ? 'Starting...' : 'Start'}
-        </button>
-
-        <button
-          disabled={isStopDisabled}
-          onClick={() => void handleStop()}
-          type="button"
-        >
-          {isStopping ? 'Stopping...' : 'Stop'}
-        </button>
-      </div>
+      <EngineControls
+        isStartDisabled={isStartDisabled}
+        isStarting={isStarting}
+        isStopDisabled={isStopDisabled}
+        isStopping={isStopping}
+        onStart={() => void handleStart(false)}
+        onStop={() => void handleStop()}
+      />
       <p className="car-card__status">Status: {engineStatus}</p>
       {engineStatus === 'started' && engine && (
           <p>
