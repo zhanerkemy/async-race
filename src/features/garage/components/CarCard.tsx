@@ -1,11 +1,7 @@
-import { useState } from 'react';
 import { CarIcon } from '../../../components/car/CarIcon';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import type { Car } from '../../../types/car';
-import { selectIsRaceActive } from '../../race/raceSelectors';
 import { useCarRace } from '../../race/useCarRace';
-import { setGaragePage, selectCar } from '../garageSlice';
-import { removeCar } from '../garageThunks';
+import { useCarManagement } from '../useCarManagement';
 import { CarManagementControls } from './CarManagementControls';
 import { EngineControls } from './EngineControls';
 import './CarCard.css';
@@ -15,13 +11,12 @@ interface CarCardProps {
 }
 
 export function CarCard({ car }: CarCardProps) {
-  const dispatch = useAppDispatch();
-
-  const currentPage = useAppSelector((state) => state.garage.currentPage);
-  const carsOnPage = useAppSelector((state) => state.garage.cars.length);
-  const isRaceActive = useAppSelector(selectIsRaceActive);
-
-  const [isDeleting, setIsDeleting] = useState(false);
+  const {
+    isDeleting,
+    isRaceActive,
+    removeSelectedCar,
+    selectCurrentCar,
+  } = useCarManagement(car);
 
   const {
     carRef,
@@ -35,33 +30,13 @@ export function CarCard({ car }: CarCardProps) {
     stopCar,
   } = useCarRace(car);
 
-  async function handleRemove(): Promise<void> {
-    if (isRaceActive) {
-      return;
-    }
-
-    try {
-      setIsDeleting(true);
-
-      const shouldMoveBack = carsOnPage === 1 && currentPage > 1;
-
-      await dispatch(removeCar(car.id)).unwrap();
-
-      if (shouldMoveBack) {
-        dispatch(setGaragePage(currentPage - 1));
-      }
-    } finally {
-      setIsDeleting(false);
-    }
-  }
-
   return (
     <article className="car-card">
       <CarManagementControls
         isDeleting={isDeleting}
         isRaceActive={isRaceActive}
-        onRemove={() => void handleRemove()}
-        onSelect={() => dispatch(selectCar(car))}
+        onRemove={() => void removeSelectedCar()}
+        onSelect={selectCurrentCar}
       />
 
       <h2 className="car-card__name">{car.name}</h2>
