@@ -88,7 +88,6 @@ src/
 │   ├── garage/
 │   ├── race/
 │   └── winners/
-├── hooks/
 ├── types/
 ├── utils/
 ├── App.tsx
@@ -183,11 +182,13 @@ http://localhost:3000
 
 ## Garage
 
-> ![alt text](image.png)
+> <img width="1270" height="718" alt="image" src="https://github.com/user-attachments/assets/9fa5a017-a635-4391-a9ad-1659312d0e50" />
+
 
 ## Winners
 
-> ![alt text](image-1.png)
+> <img width="1286" height="442" alt="image" src="https://github.com/user-attachments/assets/f9e663ff-0489-4ca3-9eba-1b27fbbe1d5d" />
+
 
 ---
 
