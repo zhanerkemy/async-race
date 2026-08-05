@@ -1,73 +1,257 @@
-# React + TypeScript + Vite
+# Async Race
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)
+![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-8A2BE2?logo=redux)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite)
+![Vercel](https://img.shields.io/badge/Deployed-Vercel-black?logo=vercel)
 
-Currently, two official plugins are available:
+A modern single-page application built with **React**, **TypeScript**, and **Redux Toolkit** that simulates car races using a REST API. Users can manage a garage of cars, control engines, run races, and track winners with sorting and pagination.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Live Demo
 
-## React Compiler
+**Frontend:** https://async-race-beryl.vercel.app/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+> **Note**
+>
+> This repository contains the frontend application.
+> To use all functionality, the official Async Race backend must be running locally on:
+>
+> ```
+> http://localhost:3000
+> ```
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Garage
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Create, update and delete cars
+- Choose custom car colors
+- Generate 100 random cars
+- Display 7 cars per page
+- Automatic pagination
+- Empty garage handling
+- Automatic return to the previous page after deleting the last car
+- Persistent create/edit form state
+- Persistent pagination state
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+## Race
+
+- Start and stop individual engines
+- Start race for all visible cars
+- Reset race
+- Responsive car animation
+- Winner detection
+- Winner announcement
+- Engine failure handling
+- Disable unsafe actions while a race is running
+
+## Winners
+
+- Winner statistics table
+- Car icon and name
+- Wins counter
+- Best race time
+- Pagination
+- Sorting by wins
+- Sorting by best time
+- Ascending and descending sorting
+
+---
+
+# Tech Stack
+
+- React
+- TypeScript
+- Redux Toolkit
+- React Router
+- Vite
+- Fetch API
+- CSS
+- ESLint
+- Prettier
+- Vercel
+
+---
+
+# Project Structure
+
+```text
+src/
+├── api/
+├── app/
+├── components/
+├── constants/
+├── features/
+│   ├── garage/
+│   ├── race/
+│   └── winners/
+├── hooks/
+├── types/
+├── utils/
+├── App.tsx
+└── main.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+# Installation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+## Clone the repository
+
+```bash
+git clone https://github.com/zhanerkemy/async-race.git
+cd async-race
 ```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Create a `.env` file
+
+```env
+VITE_API_BASE_URL=http://localhost:3000
+```
+
+A sample configuration is available in:
+
+```text
+.env.example
+```
+
+---
+
+# Running the Project
+
+Start the frontend
+
+```bash
+npm run dev
+```
+
+Build production version
+
+```bash
+npm run build
+```
+
+Run ESLint
+
+```bash
+npm run lint
+```
+
+Format project
+
+```bash
+npm run format
+```
+
+Preview production build
+
+```bash
+npm run preview
+```
+
+---
+
+# Backend
+
+Clone and start the official Async Race backend:
+
+```bash
+git clone https://github.com/mikhama/async-race-api.git
+cd async-race-api
+npm install
+npm start
+```
+
+The backend should be available at:
+
+```
+http://localhost:3000
+```
+
+---
+
+# Screenshots
+
+## Garage
+
+> ![alt text](image.png)
+
+## Winners
+
+> ![alt text](image-1.png)
+
+---
+
+# RS School Self-Assessment
+
+**Estimated score:** **390 / 400**
+
+## UI Deployment
+
+- [x] Frontend deployed on Vercel
+
+## Repository
+
+- [x] Meaningful commits
+- [x] README included
+- [x] Deployment link included
+- [x] Estimated score included
+
+## Basic Structure (80 / 80)
+
+- [x] Garage page
+- [x] Winners page
+- [x] Persistent application state
+
+## Garage (90 / 90)
+
+- [x] CRUD operations
+- [x] Color picker
+- [x] Generate 100 cars
+- [x] Pagination
+- [x] Empty state
+- [x] Previous-page handling after deletion
+
+## Winners (50 / 50)
+
+- [x] Winners table
+- [x] Pagination
+- [x] Sorting
+- [x] Correct winner updates
+
+## Race (170 / 170)
+
+- [x] Engine control
+- [x] Race animation
+- [x] Reset
+- [x] Winner detection
+- [x] Responsive animation
+- [x] Safe actions during race
+
+## Tooling (10 / 10)
+
+- [x] ESLint
+- [x] Prettier
+
+---
+
+# Author
+
+**Zhanerke Myrzabekova**
+
+GitHub: https://github.com/zhanerkemy
+
+---
+
+# 📄 License
+
+This project was developed for the **RS School Async Race** assignment and is intended for educational purposes.
